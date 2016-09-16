@@ -1,0 +1,22 @@
+{
+  "name": "sample",
+  "description": "Sample project",
+  "license": "MIT",
+  "dependencies": {
+    "font-awesome": "^4.6.3",
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7"
+  },
+  "overrides": {
+    "bootstrap-sass": {
+      "main": [
+        "assets/javascripts/bootstrap.js"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.min.css"
+      ]
+    }
+  }
+}
