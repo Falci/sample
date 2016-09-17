@@ -148,4 +148,10 @@ gulp.task('watch', () => {
   ], ['scripts'])
   .on('change', browserSync.reload);
 
+  gulp.watch([
+    config.files.src.concat('/*.html'),
+    config.files.src.concat('/**/*.html')
+  ], ['inject'])
+  .on('change', browserSync.reload);
+
 });
