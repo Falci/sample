@@ -8,7 +8,11 @@ let gulp = require('gulp'),
 
 gulp.task('dev', ['build', 'server', 'watch']);
 
-gulp.task('dist', ['build'], () => {
+gulp.task('dist', done => {
+  $.runSequence('build', ['dist:others', 'dist:inject'], done)
+});
+
+gulp.task('dist:inject', () => {
   let jsFilter = $.filter("**/*.js", { restore: true }),
     cssFilter = $.filter("**/*.css", { restore: true }),
     indexHtmlFilter = $.filter(['!**/*.html'], { restore: true });
@@ -17,12 +21,17 @@ gulp.task('dist', ['build'], () => {
       config.files.build.concat('/*.html'),
       config.files.build.concat('/**/*.html')
     ])
+    .pipe($.debug({title: 'dist'}))
     .pipe($.useref())
     .pipe(jsFilter)
+    .pipe($.sourcemaps.init())
     .pipe($.uglify())
+    .pipe($.sourcemaps.write('.'))
     .pipe(jsFilter.restore)
     .pipe(cssFilter)
+    .pipe($.sourcemaps.init())
     .pipe($.csso())
+    .pipe($.sourcemaps.write('.'))
     .pipe(cssFilter.restore)
     .pipe(indexHtmlFilter)
     .pipe($.rev())
@@ -30,6 +39,33 @@ gulp.task('dist', ['build'], () => {
     .pipe($.revReplace())
     .pipe(gulp.dest(config.files.dist));
 });
+
+gulp.task('dist:others', () => {
+  let map = {
+    'fonts': ['eot', 'font*svg', 'ttf', 'woff', 'woff2'],
+    'images': ['png', 'jpg', 'jpeg']
+  },
+  promises = [];
+
+  for(let folder in map) {
+    let src = [];
+    map[folder].forEach(ext => {
+      src.push(config.files.build.concat('/*.' + ext));
+      src.push(config.files.build.concat('/**/*.' + ext));
+    });
+
+    let promise = new Promise(resolve => {
+      gulp.src(src)
+      .pipe($.debug({title: 'dist:others:' + folder}))
+      .pipe($.flatten())
+      .pipe(gulp.dest(config.files.dist.concat('/assets/' + folder)))
+    });
+
+    promises.push(promise);
+  }
+
+  return Promise.all(promises);
+})
 
 gulp.task('build', done => {
   $.runSequence('clean', ['styles', 'scripts', 'bower'], 'inject', done);

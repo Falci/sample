@@ -11,7 +11,7 @@ As mais interessantes são:
 ## Qual a stack?
 * ES2015: Usa o Babel para *traduzir* seu código para o JS "antigo"
 * SASS
-* Bootstrap: A versão 'sass' do Bootstrap. Assim você pode sobreescrever as variaveis do Bootstrap.
+* Bootstrap: A versão 'sass' do Bootstrap. Assim você pode sobreescrever as variaveis do Bootstrap. (veja o arquivo `src/styles/_variables.scss`)
 * Font Awesome
 
 (coloquei esses dois últimos pq eu sempre uso)
@@ -26,5 +26,3 @@ As mais interessantes são:
 
 ## TODO
 * Adicionar suporte ao Material Design (talvez uma outra branch/fork?)
-* Adicionar uma task para mover as fontes (awesome) e renomear o caminho delas dentro dos css
-* Criar um arquivo `src/variables.scss` e fazer os includes necessários para sobreescrever o bootstrap
