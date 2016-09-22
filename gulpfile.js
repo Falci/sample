@@ -77,10 +77,10 @@ gulp.task('inject', done => {
 
 // build/vendor/*.(css|js) into build/*.html
 gulp.task('inject:bower', () => {
-  let sources = gulp.src([
-    config.files.build.concat('/assets/vendor/**/*.css'),
-    config.files.build.concat('/assets/vendor/**/*.js')
-  ], {read: false})
+  let sources = gulp.src($.mainBowerFiles(), {
+    base: config.files.build.concat('/assets/vendor'),
+    read: false
+  })
   .pipe($.debug({title: 'inject:bower:sources'}));
 
   return gulp.src([
@@ -90,7 +90,8 @@ gulp.task('inject:bower', () => {
   .pipe($.debug({title: 'inject:bower'}))
   .pipe($.inject(sources, {
     addRootSlash: false,
-    ignorePath: '/build',
+    ignorePath: '/bower_components',
+    addPrefix: 'assets/vendor',
     name: 'bower'
   }))
   .pipe(gulp.dest(config.files.build));
